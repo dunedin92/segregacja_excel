@@ -172,9 +172,3 @@ else:
   exit()
   
 part_number, tch1, tch2, tch3, rysunek, max_row = excel(bom_path)
-
-
-
-  
-##dfadsvlkabnds;ruaghasdl;fkrja;lavgua
-##dsgasgfasfdasghdas
