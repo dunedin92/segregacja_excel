@@ -2,14 +2,12 @@
 # coding: utf-8
 # -*- coding: utf-8 -*-
 
-
-
 from finding_bom import finding_bom
 from excel_check import excel
 from file_segregation import file_segregation
 
 # sciezka której kopiujemy pliki:
-source = "D:\PROGRAMOWANIE\segregation_files"
+source = 'D:\PROGRAMOWANIE\segregation_files'
 
 # scieżka do BOM'u i miejsce gdzie będą wrzucone posegregowane pliki:
 # destination = "D:\PROGRAMOWANIE\pliki"
