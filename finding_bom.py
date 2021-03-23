@@ -1,14 +1,3 @@
-#!/usr/bin/env python3
-# coding: utf-8
-# -*- coding: utf-8 -*-
-
-import linecache
-import shutil
-import os
-import openpyxl
-
-
-
 ## Przeszukiwanie folderu w celu znalezienia BOM'u.
 ## Plik musi mieć rozszerzenie .xlsx, i zawierać w nazwie człon "BOM" (wielkość znaków nieistotna)
 def finding_bom(destination):
