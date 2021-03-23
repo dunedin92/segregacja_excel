@@ -5,9 +5,9 @@
 import openpyxl
 
 
-def excel(path):
-    global kolumna_tch1, kolumna_part_number, kolumna_tch2, kolumna_tch3, kolumna_rysunek
-    wb = openpyxl.load_workbook(path)
+def excel(bom_path):
+
+    wb = openpyxl.load_workbook(bom_path)
     type(wb)
     arkusze = wb.sheetnames
     sheet = wb[arkusze[0]]
@@ -38,4 +38,5 @@ def excel(path):
     #  print(kolumna_tch2)
     #  print(kolumna_tch3)
     #  print(kolumna_rysunek)
-    return kolumna_part_number, kolumna_tch1, kolumna_tch2, kolumna_tch3, kolumna_rysunek, max_row
+    if kolumna_part_number and kolumna_tch1 and kolumna_tch2 and kolumna_tch3 and kolumna_rysunek and max_row:
+        return kolumna_part_number, kolumna_tch1, kolumna_tch2, kolumna_tch3, kolumna_rysunek, max_row
