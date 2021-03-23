@@ -1,10 +1,18 @@
-## Funkcja przeszukująca excel i tworząca fodlery zgodnie z kolumnami tch1 tch2 tch3 rysunek
-## Przegladajaca excel i przenoszaca pliki do odpowiednich folderów
-## W zależności od folderów kopiuje odpowiednie pliki (do C pdf i dxf, do F P pdf i step, do DRUK 3D stl, itp)
-## Tworzy plik tekstowy z brakującymi pliki i dopisuje do jakiego folderu powinien trafic brakujacy plik
+# Funkcja przeszukująca excel i tworząca fodlery zgodnie z kolumnami tch1 tch2 tch3 rysunek
+# Przegladajaca excel i przenoszaca pliki do odpowiednich folderów
+# W zależności od folderów kopiuje odpowiednie pliki (do C pdf i dxf, do F P pdf i step, do DRUK 3D stl, itp)
+# Tworzy plik tekstowy z brakującymi pliki i dopisuje do jakiego folderu powinien trafic brakujacy plik
+import os
+import openpyxl
+
 
 def file_segregation(source, destination, kolumna_part_number, kolumna_tch1, kolumna_tch2, kolumna_tch3,
                      kolumna_rysunek, max_row):
+    wb = openpyxl.load_workbook(path)
+    type(wb)
+    arkusze = wb.sheetnames
+    sheet = wb[arkusze[0]]
+
     formats = [".pdf", ".dxf", ".step", ".stl"]
 
     for i in range(2, max_row + 1):
@@ -46,6 +54,6 @@ def file_segregation(source, destination, kolumna_part_number, kolumna_tch1, kol
             else:
                 print(part_number)
                 print("dla tego pliku nie ma przypisanej obróbki")
-                ## dopisać wrzucanie tej informacji do pliku tekstowego z brakującymi plikami
+                # dopisać wrzucanie tej informacji do pliku tekstowego z brakującymi plikami
 
     return (0)

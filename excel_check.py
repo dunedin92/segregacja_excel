@@ -1,9 +1,12 @@
-## Otworzenie EXCELa, otworzenie pierwszego arkusza;
-## - znalezienie max ilości wierszy
-## - znalezienie kolumn: part number, rysunek, i obróbek
-## - zwrócenie wszystkich tych wartości
+# Otworzenie EXCELa, otworzenie pierwszego arkusza;
+# - znalezienie max ilości wierszy
+# - znalezienie kolumn: part number, rysunek, i obróbek
+# - zwrócenie wszystkich tych wartości
+import openpyxl
+
 
 def excel(path):
+    global kolumna_tch1, kolumna_part_number, kolumna_tch2, kolumna_tch3, kolumna_rysunek
     wb = openpyxl.load_workbook(path)
     type(wb)
     arkusze = wb.sheetnames
@@ -30,9 +33,9 @@ def excel(path):
         if "PART" in value.upper() and "NUMBER" in value.upper():
             kolumna_part_number = i
 
-    ##  print(kolumna_part_number)
-    ##  print(kolumna_tch1)
-    ##  print(kolumna_tch2)
-    ##  print(kolumna_tch3)
-    ##  print(kolumna_rysunek)
-    return (kolumna_part_number, kolumna_tch1, kolumna_tch2, kolumna_tch3, kolumna_rysunek, max_row)
+    #  print(kolumna_part_number)
+    #  print(kolumna_tch1)
+    #  print(kolumna_tch2)
+    #  print(kolumna_tch3)
+    #  print(kolumna_rysunek)
+    return kolumna_part_number, kolumna_tch1, kolumna_tch2, kolumna_tch3, kolumna_rysunek, max_row
