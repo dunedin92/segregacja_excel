@@ -38,5 +38,4 @@ def excel(bom_path):
     #  print(kolumna_tch2)
     #  print(kolumna_tch3)
     #  print(kolumna_rysunek)
-    if kolumna_part_number and kolumna_tch1 and kolumna_tch2 and kolumna_tch3 and kolumna_rysunek and max_row:
         return kolumna_part_number, kolumna_tch1, kolumna_tch2, kolumna_tch3, kolumna_rysunek, max_row

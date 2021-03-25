@@ -6,7 +6,7 @@ from finding_bom import finding_bom
 from excel_check import excel
 from file_segregation import file_segregation
 
-# sciezka której kopiujemy pliki:
+# sciezka z której kopiujemy pliki:
 source = 'D:\PROGRAMOWANIE\segregation_files'
 
 # scieżka do BOM'u i miejsce gdzie będą wrzucone posegregowane pliki:
@@ -23,8 +23,13 @@ if finding_bom(destination):
           " Dokładna ścieżka do pliku z BOMem to:\n")
     print("====>   " + bom_path + "   <====")
     print("\n" + "=" * 60 + "\n")
+
+#jeżeli został znaleziony plik z BOMem to otwieramy go i pobieramy dane o interesujacych nas kolumnach:
     part_number, tch1, tch2, tch3, rysunek, max_row = excel(bom_path)
+
+
 
 else:
     print("nie znaleziono pliku excel z BOMem")
     exit()
+

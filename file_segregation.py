@@ -15,6 +15,7 @@ def file_segregation(source, destination, bom_path,  kolumna_part_number, kolumn
     sheet = wb[arkusze[0]]
 
     formats = [".pdf", ".dxf", ".step", ".stl"]
+    no_file_in_surce = []
 
     for i in range(2, max_row + 1):
 
@@ -28,9 +29,9 @@ def file_segregation(source, destination, bom_path,  kolumna_part_number, kolumn
             if tch1 != "-":
                 if tch2 != "-":
                     if tch3 != "-":
-                        folder_name = tch1 + "-" + tch2 + "-" + tch3
+                        folder_name = tch1 + "+" + tch2 + "+" + tch3
                     else:
-                        folder_name = tch1 + "-" + tch2
+                        folder_name = tch1 + "+" + tch2
                 else:
                     folder_name = tch1
 
@@ -50,6 +51,18 @@ def file_segregation(source, destination, bom_path,  kolumna_part_number, kolumn
                                 else:
                                     shutil.copy(part_source, part_destination)
                                     break
+                            else:
+                                if len(no_file_in_surce) == 0:
+                                    no_file_in_surce.append(part + " - " + folder_name)
+                                else:
+                                    for i in no_file_in_surce:
+                                        if part in i:
+                                            print("brak tego pliku został już odnotowany")
+                                        else:
+                                            no_file_in_surce.append(part + " - " + folder_name)
+
+
+
             else:
                 print(part_number)
                 print("dla tego pliku nie ma przypisanej obróbki")
