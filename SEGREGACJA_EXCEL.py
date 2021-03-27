@@ -6,7 +6,7 @@ from finding_bom import finding_bom
 from excel_check import excel
 from file_segregation import file_segregation
 from txt_file_creation import txt_file_creation
-import os
+
 
 # sciezka z której kopiujemy pliki:
 source = 'D:\PROGRAMOWANIE\M006'

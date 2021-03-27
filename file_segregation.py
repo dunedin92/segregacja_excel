@@ -54,9 +54,9 @@ def file_segregation(source, destination, bom_path,  kolumna_part_number, kolumn
                         part_source = os.path.join(path, part)
                         if os.path.exists(part_source):
                             shutil.copy(part_source, part_destination)
-                            for i in no_file_in_surce:
-                                if part in i:
-                                    no_file_in_surce.remove(i)
+                            for j in no_file_in_surce:
+                                if part in j:
+                                    no_file_in_surce.remove(j)
 
                         else:
                             flag = False
@@ -64,8 +64,8 @@ def file_segregation(source, destination, bom_path,  kolumna_part_number, kolumn
                                 no_file_in_surce.append(part + " - " + folder_name)
 
                             else:
-                                for i in no_file_in_surce:
-                                    if part in i:
+                                for k in no_file_in_surce:
+                                    if part in k:
                                         flag = False
                                         break
                                     else:
