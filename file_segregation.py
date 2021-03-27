@@ -68,4 +68,4 @@ def file_segregation(source, destination, bom_path,  kolumna_part_number, kolumn
                 print("dla tego pliku nie ma przypisanej obróbki")
                 # dopisać wrzucanie tej informacji do pliku tekstowego z brakującymi plikami
 
-    return 0
+    return no_file_in_surce
