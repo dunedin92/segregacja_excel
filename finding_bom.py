@@ -16,7 +16,5 @@ def finding_bom(destination):
                 bom = nazwa
                 bom_path = os.path.join(destination, bom)
                 return bom_path
-            else:
-                return False
     else:
         return False

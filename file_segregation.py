@@ -20,12 +20,15 @@ def file_segregation(source, destination, bom_path,  kolumna_part_number, kolumn
     for i in range(2, max_row + 1):
 
         part_number = sheet.cell(row=i, column=kolumna_part_number).value
+        part_number.lstrip()
+        print(part_number)
         rysunek = sheet.cell(row=i, column=kolumna_rysunek).value
         tch1 = sheet.cell(row=i, column=kolumna_tch1).value
         tch2 = sheet.cell(row=i, column=kolumna_tch2).value
         tch3 = sheet.cell(row=i, column=kolumna_tch3).value
 
         if "WYKONANY" in rysunek.upper() or ("RYSUNEK" in rysunek.upper() and "SPAWALNICZY" in rysunek.upper()):
+            print('Istnieje rysunek do tej części')
             if tch1 != "-":
                 if tch2 != "-":
                     if tch3 != "-":
@@ -36,36 +39,52 @@ def file_segregation(source, destination, bom_path,  kolumna_part_number, kolumn
                     folder_name = tch1
 
                 folder_destiation = os.path.join(destination, folder_name)
+                print(folder_destiation)
 
                 if os.path.exists(folder_destiation):
-                    for name in formats:
-                        part = part_number + name
-                        part_destination = os.path.join(destination, part)
-
-                        for path, dirs, files in os.walk(source):
-                            part_source = os.path.join(path, part)
-                            if os.path.exists(part_source):
-                                if os.path.exists(part_destination):
-                                    print("taki plik został już wczesniej przeniesiony")
-                                    break
-                                else:
-                                    shutil.copy(part_source, part_destination)
-                                    break
-                            else:
-                                if len(no_file_in_surce) == 0:
-                                    no_file_in_surce.append(part + " - " + folder_name)
-                                else:
-                                    for i in no_file_in_surce:
-                                        if part in i:
-                                            print("brak tego pliku został już odnotowany")
-                                        else:
-                                            no_file_in_surce.append(part + " - " + folder_name)
-
-
-
+                    print('folder został juz utworzony')
+                else:
+                    os.mkdir(folder_destiation)
             else:
                 print(part_number)
                 print("dla tego pliku nie ma przypisanej obróbki")
+
+            for format in formats:
+                part = part_number + format
+                print("-" * 60)
+                print(part)
+                part_destination = os.path.join(destination, part)
+
+                for path, dirs, files in os.walk(source):
+                    print(path)
+                    part_source = os.path.join(path, part)
+                    if os.path.exists(part_source):
+                        if os.path.exists(part_destination):
+                            print("taki plik został już wczesniej przeniesiony")
+                            break
+                        else:
+                            shutil.copy(part_source, part_destination)
+                            break
+                    else:
+                        if len(no_file_in_surce) == 0:
+                            print('dodajemy rekord do zmiennej no file in source')
+                            no_file_in_surce.append(part + " - " + folder_name)
+                        else:
+                            for record in no_file_in_surce:
+                                print("aktualny rekord ze zmiennej:")
+                                print(record)
+                                print("nazwa części:")
+                                print(part)
+
+                                if part in record:
+                                    print("brak tego pliku został już odnotowany")
+                                    break
+                                else:
+                                    print('doddajemy rekord do tablicy')
+                                    no_file_in_surce.append(part + " - " + folder_name)
+                                    break
+                    print(no_file_in_surce)
+
                 # dopisać wrzucanie tej informacji do pliku tekstowego z brakującymi plikami
 
     return no_file_in_surce

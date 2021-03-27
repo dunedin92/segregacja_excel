@@ -8,7 +8,7 @@ from file_segregation import file_segregation
 from txt_file_creation import txt_file_creation
 
 # sciezka z której kopiujemy pliki:
-source = 'D:\PROGRAMOWANIE\segregation_files'
+source = 'D:\PROGRAMOWANIE\M006'
 
 # scieżka do BOM'u i miejsce gdzie będą wrzucone posegregowane pliki:
 # destination = "D:\PROGRAMOWANIE\pliki"
@@ -25,6 +25,8 @@ if finding_bom(destination):
           " Dokładna ścieżka do pliku z BOMem to:\n")
     print("====>   " + bom_path + "   <====")
     print("\n" + "=" * 60 + "\n")
+else:
+    print('bom nie został znaleziony')
 
 #jeżeli został znaleziony plik z BOMem to otwieramy go i pobieramy dane o interesujacych nas kolumnach:
 #    try:
