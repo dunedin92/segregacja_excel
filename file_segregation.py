@@ -20,7 +20,7 @@ def file_segregation(source, destination, bom_path,  kolumna_part_number, kolumn
     for i in range(2, max_row + 1):
 
         part_number = sheet.cell(row=i, column=kolumna_part_number).value
-        part_number.lstrip()
+        part_number = part_number.lstrip()
         print(part_number)
         rysunek = sheet.cell(row=i, column=kolumna_rysunek).value
         tch1 = sheet.cell(row=i, column=kolumna_tch1).value
@@ -48,12 +48,13 @@ def file_segregation(source, destination, bom_path,  kolumna_part_number, kolumn
             else:
                 print(part_number)
                 print("dla tego pliku nie ma przypisanej obróbki")
+                no_file_in_surce.append(part_number + "brak podanej obróbki w BOM")
 
             for format in formats:
                 part = part_number + format
                 print("-" * 60)
                 print(part)
-                part_destination = os.path.join(destination, part)
+                part_destination = os.path.join(folder_destiation, part)
 
                 for path, dirs, files in os.walk(source):
                     print(path)
@@ -66,25 +67,11 @@ def file_segregation(source, destination, bom_path,  kolumna_part_number, kolumn
                             shutil.copy(part_source, part_destination)
                             break
                     else:
-                        if len(no_file_in_surce) == 0:
-                            print('dodajemy rekord do zmiennej no file in source')
-                            no_file_in_surce.append(part + " - " + folder_name)
+                        if part in no_file_in_surce:
+                            print("brak tego pliku został już odnotowany")
                         else:
-                            for record in no_file_in_surce:
-                                print("aktualny rekord ze zmiennej:")
-                                print(record)
-                                print("nazwa części:")
-                                print(part)
+                            print('doddajemy rekord do tablicy')
+                            no_file_in_surce.append(part + " - " + folder_name)
 
-                                if part in record:
-                                    print("brak tego pliku został już odnotowany")
-                                    break
-                                else:
-                                    print('doddajemy rekord do tablicy')
-                                    no_file_in_surce.append(part + " - " + folder_name)
-                                    break
                     print(no_file_in_surce)
-
-                # dopisać wrzucanie tej informacji do pliku tekstowego z brakującymi plikami
-
     return no_file_in_surce
