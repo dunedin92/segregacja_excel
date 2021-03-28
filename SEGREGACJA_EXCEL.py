@@ -9,7 +9,7 @@ from txt_file_creation import txt_file_creation
 
 
 # pobranie linku do folderu skąd będą kopiowane wszystkie pliki:
-print("\n"")
+print("\n")
 print("=" * 60)
 print("\n")
 source = input("Podaj scieżkę do miejsca, z którego będą kopiowane pliki.\n"
@@ -18,7 +18,8 @@ print("=" * 60)
 
 # pobranie linku do foledru gdzie jest bom i beda kopiowane pliki:
 destination = input("Podaj scieżkę do pliku BOM, tutaj zostaną skopiowane posegregowane pliki.\n"
-                    " Upewnij się, że w folderze jest plik .xlsx i jest to BOM.\n ====>")
+                    " Upewnij się, że w folderze jest plik .xlsx, zawiera w nazwie'BOM'"
+                    " i jest zgodny z szablonem.\n ====>")
 print("=" * 60)
 
 # nazwa pliku tekstowego z brakujacymi plikami
