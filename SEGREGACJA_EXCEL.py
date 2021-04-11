@@ -2,10 +2,11 @@
 # coding: utf-8
 # -*- coding: utf-8 -*-
 
-from PyQt5.QtWidgets import (QMainWindow, QTextEdit,
-                             QAction, QFileDialog, QApplication)
-from PyQt5.QtGui import QIcon
-import sys
+from finding_bom import finding_bom
+from excel_check import excel
+from file_segregation import file_segregation
+from txt_file_creation import txt_file_creation
+
 from pathlib import Path
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QLineEdit
@@ -15,7 +16,7 @@ class MyWindow(QMainWindow):
     def __init__(self):
         super(MyWindow, self).__init__()
         self.setGeometry(200, 200, 640, 480)
-        self.setWindowTitle('Okienko')
+        self.setWindowTitle("Program do segregacji plików zgodnie z BOM'em")
         self.initUI()
 
     def initUI(self):
@@ -26,7 +27,7 @@ class MyWindow(QMainWindow):
 
         self.link1 = QLineEdit(self)
         self.link1.resize(390, 24)
-        self.link1.setText('Wpisz link do folderu lub kliknij: Przeglądaj')
+        self.link1.setText('Wpisz link do folderu lub kliknij przeglądaj')
         self.link1.move(10, 30)
 
         self.source_button = QtWidgets.QPushButton(self)
@@ -42,7 +43,7 @@ class MyWindow(QMainWindow):
 
         self.link2 = QLineEdit(self)
         self.link2.resize(390, 24)
-        self.link2.setText('Wpisz link do folderu lub kliknij: Przeglądaj')
+        self.link2.setText('Wpisz link do folderu lub kliknij przeglądaj')
         self.link2.move(10, 110)
 
         self.destination_button = QtWidgets.QPushButton(self)
@@ -56,15 +57,11 @@ class MyWindow(QMainWindow):
         self.text3.move(10, 160)
         self.text3.adjustSize()
 
-
-
         self.bom_button = QtWidgets.QPushButton(self)
         self.bom_button.setText('Przeglądaj')
         self.bom_button.adjustSize()
         self.bom_button.clicked.connect(self.clicked3)
         self.bom_button.move(50, 180)
-
-
 
     def clicked1(self):
         self.source = QFileDialog.getExistingDirectory(self, "Select Directory")
@@ -78,8 +75,6 @@ class MyWindow(QMainWindow):
         self.bom_path = QFileDialog.ExistingFile(self, "Select File Name:", "\D",  " Excel files (*.xlsx *.xls)")
         self.text3.setText(self.bom_path)
 
-
-
 def window():
     app = QApplication(sys.argv)
     win = MyWindow()
@@ -87,11 +82,6 @@ def window():
     sys.exit(app.exec_())
 
 window()
-
-
-
-
-
 # # pobranie linku do folderu skąd będą kopiowane wszystkie pliki:
 # print("\n")
 # print("=" * 60)
