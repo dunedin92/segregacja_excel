@@ -57,6 +57,11 @@ class MyWindow(QMainWindow):
         self.text3.move(10, 160)
         self.text3.adjustSize()
 
+        self.text4 = QtWidgets.QLabel(self)
+        self.text4.setText('...')
+        self.text4.move(10, 210)
+        self.text4.adjustSize()
+
         self.bom_button = QtWidgets.QPushButton(self)
         self.bom_button.setText('Przeglądaj')
         self.bom_button.adjustSize()
@@ -72,8 +77,11 @@ class MyWindow(QMainWindow):
         self.link2.setText(self.destination)
 
     def clicked3(self):
-        self.bom_path = QFileDialog.ExistingFile(self, "Select File Name:", "\D",  " Excel files (*.xlsx *.xls)")
-        self.text3.setText(self.bom_path)
+        self.bom_path = QFileDialog.getOpenFileName(self, "Select File Name:", "D:\PROGRAMOWANIE\M006\M006",  " Excel files (*.xlsx *.xls)")
+        print(self.bom_path)
+        self.text4.setText(self.bom_path[0])
+        self.text4.adjustSize()
+
 
 def window():
     app = QApplication(sys.argv)
