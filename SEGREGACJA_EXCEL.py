@@ -30,6 +30,7 @@ class MyWindow(QMainWindow):
         self.link1.setText('Wpisz link do folderu lub kliknij przeglądaj')
         self.link1.move(10, 30)
 
+
         self.source_button = QtWidgets.QPushButton(self)
         self.source_button.setText('Przeglądaj')
         self.source_button.adjustSize()
@@ -68,9 +69,17 @@ class MyWindow(QMainWindow):
         self.bom_button.clicked.connect(self.clicked3)
         self.bom_button.move(50, 180)
 
+        self.execute_button = QtWidgets.QPushButton(self)
+        self.execute_button.setText('Sprawdź')
+        self.execute_button.adjustSize()
+        self.execute_button.clicked.connect(self.clicked4)
+        self.execute_button.move(50, 230)
+
     def clicked1(self):
         self.source = QFileDialog.getExistingDirectory(self, "Select Directory")
         self.link1.setText(self.source)
+        text = self.link1.text()
+        print(text)
 
     def clicked2(self):
         self.destination = QFileDialog.getExistingDirectory(self, "Select Directory")
@@ -78,9 +87,17 @@ class MyWindow(QMainWindow):
 
     def clicked3(self):
         self.bom_path = QFileDialog.getOpenFileName(self, "Select File Name:", "D:\PROGRAMOWANIE\M006\M006",  " Excel files (*.xlsx *.xls)")
-        print(self.bom_path)
         self.text4.setText(self.bom_path[0])
         self.text4.adjustSize()
+
+    def clicked4(self):
+        text1 = self.link1.text()
+        text2 = self.link2.text()
+        text3 = self.bom_path[0]
+
+        print(text1)
+        print(text2)
+        print(text3)
 
 
 def window():
