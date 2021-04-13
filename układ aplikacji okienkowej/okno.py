@@ -9,7 +9,8 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QLineEdit
+import sys
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -71,7 +72,6 @@ class Ui_MainWindow(object):
         self.line_bom_path.setObjectName("line_bom_path")
         self.bom_verification_info_text = QtWidgets.QLabel(self.block_1)
         self.bom_verification_info_text.setGeometry(QtCore.QRect(220, 120, 390, 25))
-        self.bom_verification_info_text.setText("")
         self.bom_verification_info_text.setObjectName("bom_verification_info_text")
         self.block_2 = QtWidgets.QFrame(self.centralwidget)
         self.block_2.setGeometry(QtCore.QRect(10, 170, 620, 120))
@@ -117,6 +117,9 @@ class Ui_MainWindow(object):
         self.qty_calculation_button.setFont(font)
         self.qty_calculation_button.setDefault(True)
         self.qty_calculation_button.setObjectName("qty_calculation_button")
+        self.bom_verification_info_text_2 = QtWidgets.QLabel(self.block_2)
+        self.bom_verification_info_text_2.setGeometry(QtCore.QRect(220, 85, 390, 25))
+        self.bom_verification_info_text_2.setObjectName("bom_verification_info_text_2")
         self.block_3 = QtWidgets.QFrame(self.centralwidget)
         self.block_3.setGeometry(QtCore.QRect(10, 295, 620, 120))
         self.block_3.setAccessibleName("")
@@ -264,6 +267,14 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
+        self.bom_button.clicked.connect(self.bom_button_clicked)
+        self.bom_verification_button.clicked.connect(self.bom_verification_button_clicked)
+        self.qty_calculation_button.clicked.connect(self.qty_calculation_button_clicked)
+        self.button_destination_path.clicked.connect(self.button_destination_path_clicked)
+        self.button_source_path.clicked.connect(self.button_source_path_clicked)
+        self.button_segregation.clicked.connect(self.button_segregation_clicked)
+        self.end_button.clicked.connect(self.end_button_clicked)
+
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
@@ -271,9 +282,11 @@ class Ui_MainWindow(object):
         self.block_1_description.setText(_translate("MainWindow", "Wybierz plik excel zawierający BOM i kliknij zweryfikuj aby sprawdzić czy jest on poprawny."))
         self.bom_button.setText(_translate("MainWindow", "Przeglądaj"))
         self.bom_verification_button.setText(_translate("MainWindow", "Zweryfikuj Poprawność"))
+        self.bom_verification_info_text.setText(_translate("MainWindow", "..."))
         self.block_2_title.setText(_translate("MainWindow", "Krok 2"))
         self.block_2_description.setText(_translate("MainWindow", "<html><head/><body><p align=\"justify\">Krok nie jest obowiązkowy. Kliknij przycisk aby program automatycznie policzył i wprowadził do arkusza Qty_Total.              Upewnij się, że plik nie jest obecnie otwarty.</p></body></html>"))
         self.qty_calculation_button.setText(_translate("MainWindow", "Policz Qty_Total"))
+        self.bom_verification_info_text_2.setText(_translate("MainWindow", "..."))
         self.block_3_title.setText(_translate("MainWindow", "Krok 3"))
         self.block_3_description.setText(_translate("MainWindow", "Podaj ściezkę do miejsca gdzie bedą kopiowane posegregowane pliki i gdzie będzie zapisana lista brakujących plików."))
         self.button_destination_path.setText(_translate("MainWindow", "Przeglądaj"))
@@ -286,6 +299,27 @@ class Ui_MainWindow(object):
         self.end_status.setText(_translate("MainWindow", "Ukończono segregacje!!!"))
         self.end_button.setText(_translate("MainWindow", "Zakończ"))
 
+    def bom_button_clicked(self):
+        self.bom_path = QFileDialog.getOpenFileName(self, "Select File Name:", "C", " Excel files (*.xlsx *.xls)")
+        self.line_bom_path.setText(self.bom_path[0])
+
+    def bom_verification_button_clicked(self):
+        pass
+
+    def qty_calculation_button_clicked(self):
+        pass
+
+    def button_destination_path_clicked(self):
+        pass
+
+    def button_source_path_clicked(self):
+        pass
+
+    def button_segregation_clicked(self):
+        pass
+
+    def end_button_clicked(self):
+        sys.exit(app.exec_())
 
 if __name__ == "__main__":
     import sys
