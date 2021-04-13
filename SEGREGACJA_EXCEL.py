@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
 # coding: utf-8
 # -*- coding: utf-8 -*-
-
-import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog
 from excel_check import excel_check
-
+from qty_total_calculation import qty_total_calculation
+from file_segregation import file_segregation
+from txt_file_creation import txt_file_creation
+import os
+import sys
+import webbrowser
 
 class MyWindow(QMainWindow):
     def __init__(self):
@@ -117,9 +120,9 @@ class MyWindow(QMainWindow):
         self.qty_calculation_button.setFont(font)
         self.qty_calculation_button.setDefault(True)
         self.qty_calculation_button.setObjectName("qty_calculation_button")
-        self.bom_verification_info_text_2 = QtWidgets.QLabel(self.block_2)
-        self.bom_verification_info_text_2.setGeometry(QtCore.QRect(220, 85, 390, 25))
-        self.bom_verification_info_text_2.setObjectName("bom_verification_info_text_2")
+        self.qty_calculation_status = QtWidgets.QLabel(self.block_2)
+        self.qty_calculation_status.setGeometry(QtCore.QRect(220, 85, 390, 25))
+        self.qty_calculation_status.setObjectName("qty_calculation_status")
         self.block_3 = QtWidgets.QFrame(self.centralwidget)
         self.block_3.setGeometry(QtCore.QRect(10, 295, 620, 120))
         self.block_3.setAccessibleName("")
@@ -157,7 +160,7 @@ class MyWindow(QMainWindow):
         self.line_destination_path = QtWidgets.QLineEdit(self.block_3)
         self.line_destination_path.setGeometry(QtCore.QRect(10, 80, 520, 25))
         self.line_destination_path.setInputMask("")
-        self.line_destination_path.setReadOnly(True)
+        self.line_destination_path.setReadOnly(False)
         self.line_destination_path.setObjectName("line_destination_path")
         self.block_4 = QtWidgets.QFrame(self.centralwidget)
         self.block_4.setGeometry(QtCore.QRect(10, 420, 620, 120))
@@ -196,7 +199,7 @@ class MyWindow(QMainWindow):
         self.line_source_path = QtWidgets.QLineEdit(self.block_4)
         self.line_source_path.setGeometry(QtCore.QRect(10, 80, 520, 25))
         self.line_source_path.setInputMask("")
-        self.line_source_path.setReadOnly(True)
+        self.line_source_path.setReadOnly(False)
         self.line_source_path.setObjectName("line_source_path")
         self.block_5 = QtWidgets.QFrame(self.centralwidget)
         self.block_5.setGeometry(QtCore.QRect(10, 545, 620, 120))
@@ -239,16 +242,17 @@ class MyWindow(QMainWindow):
         self.button_segregation.setDefault(True)
         self.button_segregation.setObjectName("button_segregation")
         self.end_status = QtWidgets.QLabel(self.block_5)
-        self.end_status.setGeometry(QtCore.QRect(180, 80, 200, 25))
+        self.end_status.setGeometry(QtCore.QRect(130, 75, 500, 40))
         font = QtGui.QFont()
         font.setFamily("Century Gothic")
-        font.setPointSize(11)
+        font.setPointSize(10)
         font.setBold(True)
         font.setWeight(75)
         font.setStyleStrategy(QtGui.QFont.NoAntialias)
         self.end_status.setFont(font)
         self.end_status.setTextFormat(QtCore.Qt.AutoText)
-        self.end_status.setAlignment(QtCore.Qt.AlignCenter)
+        self.end_status.setAlignment(QtCore.Qt.AlignLeft)
+        self.end_status.setWordWrap(True)
         self.end_status.setObjectName("end_status")
         self.end_button = QtWidgets.QPushButton(self.centralwidget)
         self.end_button.setGeometry(QtCore.QRect(510, 680, 120, 30))
@@ -279,7 +283,7 @@ class MyWindow(QMainWindow):
         self.block_2_title.setText(_translate("MainWindow", "Krok 2"))
         self.block_2_description.setText(_translate("MainWindow", "<html><head/><body><p align=\"justify\">Krok nie jest obowiązkowy. Kliknij przycisk aby program automatycznie policzył i wprowadził do arkusza Qty_Total.              Upewnij się, że plik nie jest obecnie otwarty.</p></body></html>"))
         self.qty_calculation_button.setText(_translate("MainWindow", "Policz Qty_Total"))
-        self.bom_verification_info_text_2.setText(_translate("MainWindow", "..."))
+        self.qty_calculation_status.setText(_translate("MainWindow", "..."))
         self.block_3_title.setText(_translate("MainWindow", "Krok 3"))
         self.block_3_description.setText(_translate("MainWindow", "Podaj ściezkę do miejsca gdzie bedą kopiowane posegregowane pliki i gdzie będzie zapisana lista brakujących plików."))
         self.button_destination_path.setText(_translate("MainWindow", "Przeglądaj"))
@@ -289,7 +293,7 @@ class MyWindow(QMainWindow):
         self.block_5_title.setText(_translate("MainWindow", "Krok 5"))
         self.block_5_description.setText(_translate("MainWindow", "Kliknij przycisk Segreguj aby posegregować pliki zgodnie z podanymi wyżej danymi."))
         self.button_segregation.setText(_translate("MainWindow", "Segreguj"))
-        self.end_status.setText(_translate("MainWindow", "Ukończono segregacje!!!"))
+        self.end_status.setText(_translate("MainWindow", " "))
         self.end_button.setText(_translate("MainWindow", "Zakończ"))
 
         self.bom_button.clicked.connect(self.bom_button_clicked)
@@ -301,6 +305,7 @@ class MyWindow(QMainWindow):
         self.end_button.clicked.connect(self.end_button_clicked)
 
         self.bom_path = 'null'
+        self.correct_bom_file_selected = False
 
     def bom_button_clicked(self):
         self.bom_path = QFileDialog.getOpenFileName(self, "Select File Name:", "D:\PROGRAMOWANIE", " Excel files (*.xlsx *.xls)")
@@ -312,37 +317,65 @@ class MyWindow(QMainWindow):
         return self.bom_path
 
     def bom_verification_button_clicked(self):
-        print('bom_verification button wcisiniety')
-
         if self.bom_path == 'null':
-            print("nie ma zmiennej bom path")
             self.bom_verification_info_text.setText('NIE WYBRANO ŻADNEGO PLIKU ZAWIERAJĄCEGO BOM!!!')
         else:
-            print("jest zmienna bom path")
             print(self.bom_path[0])
-            path = self.bom_path[0]
+            self.path = self.bom_path[0]
             try:
-                item_number, part_number, qty, qty_total, tch1, tch2, tch3, rysunek, max_row = excel_check(path)
-                if part_number and tch1 and tch2 and tch3 and rysunek and max_row:
-                    self.bom_verification_info_text.setText('Wybrano poprawny plik BOM. Możesz przejść do kolejnego kroku.')
+                self.item_number, self.part_number, self.qty, self.qty_total, self.tch1, self.tch2, self.tch3, self.rysunek, self.max_row = excel_check(self.path)
+                self.bom_verification_info_text.setText('Wybrano poprawny plik BOM. Możesz przejść do kolejnego kroku.')
+                self.correct_bom_file_selected = True
+                return self.path, self.item_number, self.part_number, self.qty, self.qty_total, self.tch1, self.tch2, self.tch3, self.rysunek, self.max_row
             except:
-                print('plik nie jest poprawny')
                 self.bom_verification_info_text.setText('Wybrany plik jest niepoprawny.')
-
-
+                self.correct_bom_file_selected = False
 
     def qty_calculation_button_clicked(self):
-        print('qty calculation button wcisniety')
-
+        try:
+            qty_total_calculation(self.path, self.item_number, self.qty, self.qty_total)
+            self.qty_calculation_status.setText('Ilości w kolumnie Qty_Total zostały pomyślnie policzone.')
+        except:
+            self.qty_calculation_status.setText("Nie udało się policzyć wartości. Sprawdź czy plik nie jest otwary w innym programie")
 
     def button_destination_path_clicked(self):
-        print('destinatination path button wcisniety')
+        self.destination_path = QFileDialog.getExistingDirectory(self, "Select Directory")
+        self.line_destination_path.setText(self.destination_path)
 
     def button_source_path_clicked(self):
-        print('source path button wcisniety')
+        self.source_path = QFileDialog.getExistingDirectory(self, "Select Directory")
+        self.line_source_path.setText(self.source_path)
 
     def button_segregation_clicked(self):
-        print('button segregation wcisniety')
+        self.end_status.setText(" ")
+        self.destination_path = self.line_destination_path.text()
+        self.source_path = self.line_source_path.text()
+        txt_file_name = "brakujace_pliki.txt"
+
+        if self.correct_bom_file_selected:
+            if os.path.exists(self.destination_path):
+                if os.path.exists(self.source_path):
+
+                    try:
+                        self.end_status.setText("Czekaj...")
+                        self.no_file_in_source = file_segregation(self.source_path, self.destination_path, self.path, self.part_number, self.tch1, self.tch2, self.tch3, self.rysunek, self.max_row)
+                        self.end_status.setText("UKOŃCZONO SEGREGACJE!!!")
+                    except:
+                        self.end_status.setText("Wystapił problem w trakcie segregacji plików")
+
+                    try:
+                        txt_file_creation(self.destination_path, self.no_file_in_source, txt_file_name)
+                        self.end_status.setText("UKOŃCZONO SEGREGACJE!!! Lista brakujących plików w pliku brakujące_pliki.txt")
+                        txt_file_path = os.path.join(self.destination_path, txt_file_name)
+                        webbrowser.open(txt_file_path)
+                    except:
+                        self.end_status.setText("Wystapił problem z zapisem brakujących plików do: " + txt_file_name)
+                else:
+                    self.end_status.setText("Nie wybrano ścieżki, z której mają być kopiowane pliki!")
+            else:
+                self.end_status.setText("Nie wybrano ścieżki, do której mają być kopiowane pliki!")
+        else:
+            self.end_status.setText("Nie wybrano BOM'u do segregacji lub wybrany plik nie został zweryfikowany.")
 
     def end_button_clicked(self):
         sys.exit(app.exec_())
@@ -354,54 +387,3 @@ def window():
     sys.exit(app.exec_())
 
 window()
-
-# # pobranie linku do folderu skąd będą kopiowane wszystkie pliki:
-# print("\n")
-# print("=" * 60)
-# print("\n")
-# source = input("Podaj scieżkę do miejsca, z którego będą kopiowane pliki.\n"
-#                "Zostaną przeszukane wszystie foldery i podfoldery tej lokalizacji.\n ====>")
-# print("=" * 60)
-#
-# # pobranie linku do foledru gdzie jest bom i beda kopiowane pliki:
-# destination = input("Podaj scieżkę do pliku BOM, tutaj zostaną skopiowane posegregowane pliki.\n"
-#                     " Upewnij się, że w folderze jest plik .xlsx, zawiera w nazwie'BOM'"
-#                     " i jest zgodny z szablonem.\n ====>")
-# print("=" * 60)
-#
-# # nazwa pliku tekstowego z brakujacymi plikami
-# txt_file_name = "Lista_brakujacych_plikow.txt"
-#
-# if finding_bom(destination):
-#     bom_path = finding_bom(destination)
-#     print("=" * 60)
-#     print(" Znaleziono plik z BOMem:\n"
-#           " Dokładna ścieżka do pliku z BOMem to:\n")
-#     print("====>   " + bom_path + "   <====")
-#     print("\n" + "=" * 60 + "\n")
-# else:
-#     print('bom nie został znaleziony')
-#
-# #jeżeli został znaleziony plik z BOMem to otwieramy go i pobieramy dane o interesujacych nas kolumnach:
-# try:
-#     print("Pobieranie danych o wierszach i kolumnach z pliku excel.")
-#     part_number, tch1, tch2, tch3, rysunek, max_row = excel(bom_path)
-#     print("-" * 60)
-# except:
-#     print("Nie udało się pobrać danych z pliku excel, sprawdź czy zgadza się z szablonem.")
-#
-# #jeżeli pobrano dane z bomu to tworzymy foldery i wrzucamy do nich pliki:
-# try:
-#     print("Segregacja plików zgodnie z obróbkami w pliku excel.")
-#     no_file_in_source = file_segregation(source,destination, bom_path, part_number, tch1, tch2, tch3, rysunek, max_row)
-#     print("-" * 60)
-# except:
-#    print("Wystapił problem w trakcie segregacji.")
-#
-# #jezeli udało się posegregować pliki to wynikiem jest tabela z brakującymi elementami, poniższa funkcje wrzuca te dnae do pliku tekstowego
-# try:
-#     print("Zapis brakujących plików do pliku tekstowego: '" + txt_file_name + "'.")
-#     txt_file_creation(destination, no_file_in_source, txt_file_name)
-#     print("-" * 60)
-# except:
-#    print("Nie udało się zapisać danych o brakujących elementach do pliku.")

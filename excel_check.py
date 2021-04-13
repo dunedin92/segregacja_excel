@@ -42,14 +42,14 @@ def excel_check(bom_path):
         if "QTY" in value.upper() and "TOTAL" in value.upper():
             kolumna_qty_total = i
 
-    print(kolumna_item_number)
-    print(kolumna_part_number)
-    print(kolumna_qty)
-    print(kolumna_qty_total)
-    print(kolumna_tch1)
-    print(kolumna_tch2)
-    print(kolumna_tch3)
-    print(kolumna_rysunek)
+    # print(kolumna_item_number)
+    # print(kolumna_part_number)
+    # print(kolumna_qty)
+    # print(kolumna_qty_total)
+    # print(kolumna_tch1)
+    # print(kolumna_tch2)
+    # print(kolumna_tch3)
+    # print(kolumna_rysunek)
 
 
     return kolumna_item_number, kolumna_part_number, kolumna_qty, kolumna_qty_total, kolumna_tch1, kolumna_tch2, kolumna_tch3, kolumna_rysunek, max_row
