@@ -5,8 +5,8 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog
 from excel_check import excel_check
 from qty_total_calculation import qty_total_calculation
-from file_segregation import file_segregation
 from txt_file_creation import txt_file_creation
+from temp_file_list import temp_file_list
 import os
 import sys
 import webbrowser
@@ -358,16 +358,18 @@ class MyWindow(QMainWindow):
 
                     try:
                         self.end_status.setText("Czekaj...")
-                        self.no_file_in_source = file_segregation(self.source_path, self.destination_path, self.path, self.part_number, self.tch1, self.tch2, self.tch3, self.rysunek, self.max_row)
-                        self.end_status.setText("UKOŃCZONO SEGREGACJE!!!")
+                        self.no_file_in_source, self.modification_time = temp_file_list(self.source_path, self.destination_path, self.path, self.part_number, self.tch1, self.tch2, self.tch3, self.rysunek, self.max_row)
+                        self.end_status.setText("UKOŃCZONO TWORZENIE LISTY PLIKÓW DO KONWERSJI!!!")
+                        print(self.modification_time)
                     except:
-                        self.end_status.setText("Wystapił problem w trakcie segregacji plików")
+                        self.end_status.setText("Wystapił problem w trakcie tworzenie listy plików")
 
                     try:
                         txt_file_creation(self.destination_path, self.no_file_in_source, txt_file_name)
                         self.end_status.setText("UKOŃCZONO SEGREGACJE!!! Lista brakujących plików w pliku brakujące_pliki.txt")
                         txt_file_path = os.path.join(self.destination_path, txt_file_name)
                         webbrowser.open(txt_file_path)
+
                     except:
                         self.end_status.setText("Wystapił problem z zapisem brakujących plików do: " + txt_file_name)
                 else:
