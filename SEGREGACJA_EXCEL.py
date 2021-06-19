@@ -7,9 +7,13 @@ from excel_check import excel_check
 from qty_total_calculation import qty_total_calculation
 from txt_file_creation import txt_file_creation
 from temp_file_list import temp_file_list
+from move_files import move_files
 import os
 import sys
 import webbrowser
+import time
+import subprocess
+import shutil
 
 class MyWindow(QMainWindow):
     def __init__(self):
@@ -268,30 +272,33 @@ class MyWindow(QMainWindow):
         self.end_button.setObjectName("end_button")
         self.setCentralWidget(self.centralwidget)
 
-        #self.retranslateUi(MyWindow)
+        # self.retranslateUi(MyWindow)
         QtCore.QMetaObject.connectSlotsByName(self)
-
-
 
         _translate = QtCore.QCoreApplication.translate
         self.setWindowTitle(_translate("MainWindow", "Aplikacja Segregująca pliki BOM'u"))
         self.block_1_title.setText(_translate("MainWindow", "Krok 1"))
-        self.block_1_description.setText(_translate("MainWindow", "Wybierz plik excel zawierający BOM i kliknij zweryfikuj aby sprawdzić czy jest on poprawny."))
+        self.block_1_description.setText(_translate("MainWindow",
+                                                    "Wybierz plik excel zawierający BOM i kliknij zweryfikuj aby sprawdzić czy jest on poprawny."))
         self.bom_button.setText(_translate("MainWindow", "Przeglądaj"))
         self.bom_verification_button.setText(_translate("MainWindow", "Zweryfikuj Poprawność"))
         self.bom_verification_info_text.setText(_translate("MainWindow", "..."))
         self.block_2_title.setText(_translate("MainWindow", "Krok 2"))
-        self.block_2_description.setText(_translate("MainWindow", "<html><head/><body><p align=\"justify\">Krok nie jest obowiązkowy. Kliknij przycisk aby program automatycznie policzył i wprowadził do arkusza Qty_Total.              Upewnij się, że plik nie jest obecnie otwarty.</p></body></html>"))
+        self.block_2_description.setText(_translate("MainWindow",
+                                                    "<html><head/><body><p align=\"justify\">Krok nie jest obowiązkowy. Kliknij przycisk aby program automatycznie policzył i wprowadził do arkusza Qty_Total.              Upewnij się, że plik nie jest obecnie otwarty.</p></body></html>"))
         self.qty_calculation_button.setText(_translate("MainWindow", "Policz Qty_Total"))
         self.qty_calculation_status.setText(_translate("MainWindow", "..."))
         self.block_3_title.setText(_translate("MainWindow", "Krok 3"))
-        self.block_3_description.setText(_translate("MainWindow", "Podaj ściezkę do miejsca gdzie bedą kopiowane posegregowane pliki i gdzie będzie zapisana lista brakujących plików."))
+        self.block_3_description.setText(_translate("MainWindow",
+                                                    "Podaj ściezkę do miejsca gdzie bedą kopiowane posegregowane pliki i gdzie będzie zapisana lista brakujących plików."))
         self.button_destination_path.setText(_translate("MainWindow", "Przeglądaj"))
         self.block_4_title.setText(_translate("MainWindow", "Krok 4"))
-        self.block_4_description.setText(_translate("MainWindow", "Podaj ściezkę do lokalizacji, z której będą kopiowane pliki. Program przejrzy wszystkie podfoldery tego folderu."))
+        self.block_4_description.setText(_translate("MainWindow",
+                                                    "Podaj ściezkę do lokalizacji, z której będą kopiowane pliki. Program przejrzy wszystkie podfoldery tego folderu."))
         self.button_source_path.setText(_translate("MainWindow", "Przeglądaj"))
         self.block_5_title.setText(_translate("MainWindow", "Krok 5"))
-        self.block_5_description.setText(_translate("MainWindow", "Kliknij przycisk Segreguj aby posegregować pliki zgodnie z podanymi wyżej danymi."))
+        self.block_5_description.setText(_translate("MainWindow",
+                                                    "Kliknij przycisk Segreguj aby posegregować pliki zgodnie z podanymi wyżej danymi."))
         self.button_segregation.setText(_translate("MainWindow", "Segreguj"))
         self.end_status.setText(_translate("MainWindow", " "))
         self.end_button.setText(_translate("MainWindow", "Zakończ"))
@@ -308,7 +315,8 @@ class MyWindow(QMainWindow):
         self.correct_bom_file_selected = False
 
     def bom_button_clicked(self):
-        self.bom_path = QFileDialog.getOpenFileName(self, "Select File Name:", "D:\PROGRAMOWANIE", " Excel files (*.xlsx *.xls)")
+        self.bom_path = QFileDialog.getOpenFileName(self, "Select File Name:", "D:\PROGRAMOWANIE",
+                                                    " Excel files (*.xlsx *.xls)")
         print(self.bom_path)
         self.line_bom_path.setText(self.bom_path[0])
         font = QtGui.QFont()
@@ -323,7 +331,8 @@ class MyWindow(QMainWindow):
             print(self.bom_path[0])
             self.path = self.bom_path[0]
             try:
-                self.item_number, self.part_number, self.qty, self.qty_total, self.tch1, self.tch2, self.tch3, self.rysunek, self.max_row = excel_check(self.path)
+                self.item_number, self.part_number, self.qty, self.qty_total, self.tch1, self.tch2, self.tch3, self.rysunek, self.max_row = excel_check(
+                    self.path)
                 self.bom_verification_info_text.setText('Wybrano poprawny plik BOM. Możesz przejść do kolejnego kroku.')
                 self.correct_bom_file_selected = True
                 return self.path, self.item_number, self.part_number, self.qty, self.qty_total, self.tch1, self.tch2, self.tch3, self.rysunek, self.max_row
@@ -336,7 +345,8 @@ class MyWindow(QMainWindow):
             qty_total_calculation(self.path, self.item_number, self.qty, self.qty_total)
             self.qty_calculation_status.setText('Ilości w kolumnie Qty_Total zostały pomyślnie policzone.')
         except:
-            self.qty_calculation_status.setText("Nie udało się policzyć wartości. Sprawdź czy plik nie jest otwary w innym programie")
+            self.qty_calculation_status.setText(
+                "Nie udało się policzyć wartości. Sprawdź czy plik nie jest otwary w innym programie")
 
     def button_destination_path_clicked(self):
         self.destination_path = QFileDialog.getExistingDirectory(self, "Select Directory")
@@ -358,15 +368,33 @@ class MyWindow(QMainWindow):
 
                     try:
                         self.end_status.setText("Czekaj...")
-                        self.no_file_in_source, self.modification_time = temp_file_list(self.source_path, self.destination_path, self.path, self.part_number, self.tch1, self.tch2, self.tch3, self.rysunek, self.max_row)
+                        self.no_file_in_source, self.modification_time = temp_file_list(self.source_path,
+                                                                                        self.destination_path,
+                                                                                        self.path, self.part_number,
+                                                                                        self.tch1, self.tch2, self.tch3,
+                                                                                        self.rysunek, self.max_row)
                         self.end_status.setText("UKOŃCZONO TWORZENIE LISTY PLIKÓW DO KONWERSJI!!!")
                         print(self.modification_time)
+
+                        # uruchomienie programu c_program w C# ktory konwertuje pliki solida
+                        subprocess.call("C_program.exe")
+                        time.sleep(20)
+
+                        # petla oczekujaca na nadpisanie pliku tymczasowego 'temp_file_txt.txt'
+                        if self.modification_time != time.ctime(os.path.getmtime("temp_file_txt.txt")):
+                            print('ROZPOCZYNAM PRZENOSZENIE PLIKÓW.')
+                            move_files(self.destination_path, self.no_file_in_source)
+                            os.remove("temp_file_txt.txt")
+                        else:
+                            self.end_status.setText("Wystapił problem w trakcie konwersji plików.")
+
                     except:
                         self.end_status.setText("Wystapił problem w trakcie tworzenie listy plików")
 
                     try:
                         txt_file_creation(self.destination_path, self.no_file_in_source, txt_file_name)
-                        self.end_status.setText("UKOŃCZONO SEGREGACJE!!! Lista brakujących plików w pliku brakujące_pliki.txt")
+                        self.end_status.setText(
+                            "UKOŃCZONO SEGREGACJE!!! Lista brakujących plików w pliku brakujące_pliki.txt")
                         txt_file_path = os.path.join(self.destination_path, txt_file_name)
                         webbrowser.open(txt_file_path)
 
@@ -382,10 +410,12 @@ class MyWindow(QMainWindow):
     def end_button_clicked(self):
         sys.exit(app.exec_())
 
+
 def window():
     app = QApplication(sys.argv)
     win = MyWindow()
     win.show()
     sys.exit(app.exec_())
+
 
 window()

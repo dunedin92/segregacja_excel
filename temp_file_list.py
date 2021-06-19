@@ -41,26 +41,30 @@ def temp_file_list(source, destination, bom_path, kolumna_part_number, kolumna_t
                 if not os.path.exists(folder_destination):
                     os.mkdir(folder_destination)
                     print("folder docelowy: " + folder_destination)
+
+                # znajdowanie sciezki do pliku znalezionego w BOM
+                for path, dirs, files in os.walk(source):
+
+                    file_location = os.path.join(path, part_number_sldprt)
+                    print("szukana sciezka: " + file_location)
+
+                    if os.path.exists(file_location):
+                        print(" => podana ścieżka istnieje")
+
+                        line = os.path.join(path, part_number) + " => " + folder_name
+                        print(line)
+
+                        if line in temp_file_txt:
+                            print("element został już dodany do listy")
+                        else:
+                            temp_file_txt.append(line)
+                            print("dodano do listy")
+
             else:
                 no_file_in_surce.append(part_number + " - brak podanej obróbki w BOM")
 
-            # znajdowanie sciezki do pliku znalezionego w BOM
-            for path, dirs, files in os.walk(source):
 
-                file_location = os.path.join(path, part_number_sldprt)
-                print("szukana sciezka: " + file_location)
 
-                if os.path.exists(file_location):
-                    print("podana ścieżka istnieje")
-
-                    line = os.path.join(path, part_number) + " => " + folder_name
-                    print(line)
-
-                    if line in temp_file_txt:
-                        print("element został już dodany do listy")
-                    else:
-                        temp_file_txt.append(line)
-                        print("dodano do listy")
 
     plik = open("temp_file_txt.txt", "w", encoding='utf8')
 
@@ -70,6 +74,5 @@ def temp_file_list(source, destination, bom_path, kolumna_part_number, kolumna_t
     plik.close()
 
     modification_time = time.ctime(os.path.getmtime("temp_file_txt.txt"))
-    print(modification_time)
 
     return no_file_in_surce, modification_time
