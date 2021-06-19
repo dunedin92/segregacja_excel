@@ -8,6 +8,7 @@ def move_files(destination, no_file_in_surce):
     plik = open("temp_file_txt.txt", "r", encoding='utf8')
 
     list = plik.readlines()
+    plik.close()
 
     for line in list:
         if line.upper() != "OK":

@@ -377,8 +377,8 @@ class MyWindow(QMainWindow):
                         print(self.modification_time)
 
                         # uruchomienie programu c_program w C# ktory konwertuje pliki solida
-                        subprocess.call("C_program.exe")
-                        time.sleep(20)
+                        subprocess.call("solidworks_conversion_program.exe")
+                        time.sleep(5)
 
                         # petla oczekujaca na nadpisanie pliku tymczasowego 'temp_file_txt.txt'
                         if self.modification_time != time.ctime(os.path.getmtime("temp_file_txt.txt")):

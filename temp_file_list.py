@@ -18,6 +18,7 @@ def temp_file_list(source, destination, bom_path, kolumna_part_number, kolumna_t
         part_number = sheet.cell(row=i, column=kolumna_part_number).value
         part_number = part_number.lstrip()
         part_number_sldprt = part_number + ".sldprt"
+        part_number_sldasm = part_number + ".sldasm"
 
         rysunek = sheet.cell(row=i, column=kolumna_rysunek).value
         tch1 = sheet.cell(row=i, column=kolumna_tch1).value
@@ -46,9 +47,10 @@ def temp_file_list(source, destination, bom_path, kolumna_part_number, kolumna_t
                 for path, dirs, files in os.walk(source):
 
                     file_location = os.path.join(path, part_number_sldprt)
-                    print("szukana sciezka: " + file_location)
+                    file_location_asm = os.path.join(path, part_number_sldasm)
+                    print("szukana sciezka: " + file_location + "  lub: " + file_location_asm)
 
-                    if os.path.exists(file_location):
+                    if os.path.exists(file_location) or os.path.exists(file_location_asm):
                         print(" => podana ścieżka istnieje")
 
                         line = os.path.join(path, part_number) + " => " + folder_name
