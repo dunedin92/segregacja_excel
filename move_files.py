@@ -1,6 +1,7 @@
 import os
 import shutil
 
+
 def move_files(destination, no_file_in_surce):
 
     file_formats = [".step", ".stl", ".pdf", ".dxf"]
@@ -39,5 +40,3 @@ def move_files(destination, no_file_in_surce):
                         no_file_in_surce.append(name + "  " + folder)
 
     return no_file_in_surce
-
-

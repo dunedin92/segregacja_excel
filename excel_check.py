@@ -6,7 +6,6 @@ import openpyxl
 
 
 def excel_check(bom_path):
-
     wb = openpyxl.load_workbook(bom_path)
     type(wb)
     arkusze = wb.sheetnames
@@ -36,7 +35,7 @@ def excel_check(bom_path):
         if "ITEM" in value.upper() and "NO" in value.upper():
             kolumna_item_number = i
 
-        if "QTY" in value.upper() and not "TOTAL" in value.upper():
+        if "QTY" in value.upper() and "TOTAL" not in value.upper():
             kolumna_qty = i
 
         if "QTY" in value.upper() and "TOTAL" in value.upper():
@@ -51,5 +50,5 @@ def excel_check(bom_path):
     # print(kolumna_tch3)
     # print(kolumna_rysunek)
 
-
-    return kolumna_item_number, kolumna_part_number, kolumna_qty, kolumna_qty_total, kolumna_tch1, kolumna_tch2, kolumna_tch3, kolumna_rysunek, max_row
+    return (kolumna_item_number, kolumna_part_number, kolumna_qty, kolumna_qty_total, kolumna_tch1, kolumna_tch2,
+            kolumna_tch3, kolumna_rysunek, max_row)

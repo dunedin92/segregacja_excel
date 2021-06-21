@@ -8,11 +8,6 @@ import openpyxl
 import win32pipe
 import win32file
 import subprocess
-import time
-
-
-
-
 
 def file_segregation(source, destination, bom_path,  kolumna_part_number, kolumna_tch1, kolumna_tch2, kolumna_tch3,
                      kolumna_rysunek, max_row):
@@ -24,7 +19,7 @@ def file_segregation(source, destination, bom_path,  kolumna_part_number, kolumn
     formats = [".dxf", ".step"]
     no_file_in_surce = []
 
-    class PipeServer():
+    class PipeServer:
         def __init__(self, pipeName):
             self.pipe = win32pipe.CreateNamedPipe(r'\\.\pipe\\' + pipeName, win32pipe.PIPE_ACCESS_OUTBOUND,
                                                   win32pipe.PIPE_TYPE_MESSAGE | win32pipe.PIPE_READMODE_MESSAGE | win32pipe.PIPE_WAIT,
@@ -48,11 +43,9 @@ def file_segregation(source, destination, bom_path,  kolumna_part_number, kolumn
             else:
                 print('Saw result code of %d with data len=%d' % (code, len(data)))
 
-
     subprocess.Popen("apptest.exe")
     print("otworzono plik c#")
     t = PipeServer("CSServer")
-
 
     for i in range(2, max_row + 1):
 
@@ -65,7 +58,7 @@ def file_segregation(source, destination, bom_path,  kolumna_part_number, kolumn
         tch2 = sheet.cell(row=i, column=kolumna_tch2).value
         tch3 = sheet.cell(row=i, column=kolumna_tch3).value
 
-## wyszukanie plików w BOM ktore trzeba przekonwertować i przenieść
+# wyszukanie plików w BOM ktore trzeba przekonwertować i przenieść
         if "WYKONANY" in rysunek.upper() or ("RYSUNEK" in rysunek.upper() and "SPAWALNICZY" in rysunek.upper()):
             print("plik do konwersji")
             if tch1 != "-":
@@ -85,19 +78,18 @@ def file_segregation(source, destination, bom_path,  kolumna_part_number, kolumn
             else:
                 no_file_in_surce.append(part_number + " - brak podanej obróbki w BOM")
 
-## znalezienie scieżki do pliku modelu solida
+# znalezienie scieżki do pliku modelu solida
             for path, dirs, files in os.walk(source):
-                print("szukana sciezka: " +path)
+                print("szukana sciezka: " + path)
 
                 part_number_sldprt = part_number + ".sldprt"
-                print("numer czesci solidworks: " +part_number_sldprt)
+                print("numer czesci solidworks: " + part_number_sldprt)
                 part_source = os.path.join(path, part_number_sldprt)
                 print("sciezka zrodłowa pliku: " +part_source)
                 part_destination = os.path.join(folder_destination, part_number)
 
                 part_destination = part_destination + ".pdf"
                 print("sciezka docelowa pliku: " + part_destination)
-
 
                 if os.path.exists(part_source):
                     print("sciezka do pliku sldprt istnieje")
