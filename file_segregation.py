@@ -64,11 +64,11 @@ def file_segregation(source, destination, bom_path,  kolumna_part_number, kolumn
             if tch1 != "-":
                 if tch2 != "-":
                     if tch3 != "-":
-                        folder_name = tch1 + "+" + tch2 + "+" + tch3
+                        folder_name = tch1.upper() + "+" + tch2.upper() + "+" + tch3.upper()
                     else:
-                        folder_name = tch1 + "+" + tch2
+                        folder_name = tch1.upper() + "+" + tch2.upper()
                 else:
-                    folder_name = tch1
+                    folder_name = tch1.upper()
 
                 folder_destination = os.path.join(destination, folder_name)
 
