@@ -8,10 +8,10 @@ def move_files(destination, no_file_in_surce):
 
     plik = open("temp_file_txt.txt", "r", encoding='utf8')
 
-    list = plik.readlines()
+    line_list = plik.readlines()
     plik.close()
 
-    for line in list:
+    for line in line_list:
         if line.upper() != "OK":
             path, folder = line.split(" => ")
             path = path.rstrip()
@@ -19,8 +19,8 @@ def move_files(destination, no_file_in_surce):
             print(path)
             print(folder)
 
-            for format in file_formats:
-                path1 = path + format
+            for file_format in file_formats:
+                path1 = path + file_format
                 name = os.path.basename(path1)
                 print("pobrana nazwa pliku to:  " + name)
 

@@ -2,6 +2,7 @@ import os
 import openpyxl
 import time
 
+
 def temp_file_list(source, destination, bom_path, kolumna_part_number, kolumna_tch1, kolumna_tch2, kolumna_tch3,
                    kolumna_rysunek, max_row):
     wb = openpyxl.load_workbook(bom_path)
@@ -64,9 +65,6 @@ def temp_file_list(source, destination, bom_path, kolumna_part_number, kolumna_t
 
             else:
                 no_file_in_surce.append(part_number + " - brak podanej obróbki w BOM")
-
-
-
 
     plik = open("temp_file_txt.txt", "w", encoding='utf8')
 
