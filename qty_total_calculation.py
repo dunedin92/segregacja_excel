@@ -13,9 +13,9 @@ def qty_total_calculation(bom_path, kolumna_item_number, kolumna_qty, kolumna_qt
     sheet = wb[arkusze[0]]
     max_row = sheet.max_row
 
-    print(kolumna_item_number)
-    print(kolumna_qty)
-    print(kolumna_qty_total)
+    # print(kolumna_item_number)
+    # print(kolumna_qty)
+    # print(kolumna_qty_total)
 
     # liczenie ilosci kropek i przecinkow w numerze
     for i in range(2, max_row + 1):

@@ -8,6 +8,8 @@ from qty_total_calculation import qty_total_calculation
 from txt_file_creation import txt_file_creation
 from temp_file_list import temp_file_list
 from move_files import move_files
+from consolidation import consolidation_and_segregation
+from empty_rows_delete import  empty_rows_delete
 import os
 import sys
 import webbrowser
@@ -25,6 +27,9 @@ class MyWindow(QMainWindow):
         self.initUI()
 
     def initUI(self):
+
+        self.bom_verification_button_status = False
+
         self.centralwidget = QtWidgets.QWidget(self)
         self.centralwidget.setObjectName("centralwidget")
         self.block_1 = QtWidgets.QFrame(self.centralwidget)
@@ -286,8 +291,8 @@ class MyWindow(QMainWindow):
         self.bom_verification_info_text.setText(_translate("MainWindow", "..."))
         self.block_2_title.setText(_translate("MainWindow", "Krok 2"))
         self.block_2_description.setText(_translate("MainWindow",
-                                                    "<html><head/><body><p align=\"justify\">Krok nie jest obowiązkowy. Kliknij przycisk aby program automatycznie policzył i wprowadził do arkusza Qty_Total.              Upewnij się, że plik nie jest obecnie otwarty.</p></body></html>"))
-        self.qty_calculation_button.setText(_translate("MainWindow", "Policz Qty_Total"))
+                                                    "<html><head/><body><p align=\"justify\">Przygotowanie pliku excel. Usunięcie niepotrzebnych wierszy. Policzenie ilości. Kkonsolidacja i segregacja danych do osobnych arkuszy w pliku.</p></body></html>"))
+        self.qty_calculation_button.setText(_translate("MainWindow", "Wykonaj Operacje"))
         self.qty_calculation_status.setText(_translate("MainWindow", "..."))
         self.block_3_title.setText(_translate("MainWindow", "Krok 3"))
         self.block_3_description.setText(_translate("MainWindow",
@@ -328,6 +333,7 @@ class MyWindow(QMainWindow):
     def bom_verification_button_clicked(self):
         if self.bom_path == 'null':
             self.bom_verification_info_text.setText('NIE WYBRANO ŻADNEGO PLIKU ZAWIERAJĄCEGO BOM!!!')
+            self.bom_verification_button_status = False
         else:
             print(self.bom_path[0])
             self.path = self.bom_path[0]
@@ -335,19 +341,40 @@ class MyWindow(QMainWindow):
                 self.item_number, self.part_number, self.qty, self.qty_total, self.tch1, self.tch2, self.tch3, self.rysunek, self.max_row = excel_check(
                     self.path)
                 self.bom_verification_info_text.setText('Wybrano poprawny plik BOM. Możesz przejść do kolejnego kroku.')
-                self.correct_bom_file_selected = True
+                self.bom_verification_button_status = True
+
                 return self.path, self.item_number, self.part_number, self.qty, self.qty_total, self.tch1, self.tch2, self.tch3, self.rysunek, self.max_row
             except:
                 self.bom_verification_info_text.setText('Wybrany plik jest niepoprawny.')
-                self.correct_bom_file_selected = False
+                self.bom_verification_button_status = False
+
 
     def qty_calculation_button_clicked(self):
-        try:
-            qty_total_calculation(self.path, self.item_number, self.qty, self.qty_total)
-            self.qty_calculation_status.setText('Ilości w kolumnie Qty_Total zostały pomyślnie policzone.')
-        except:
-            self.qty_calculation_status.setText(
-                "Nie udało się policzyć wartości. Sprawdź czy plik nie jest otwary w innym programie")
+        if self.bom_verification_button_status == True:
+            self.status = True
+
+            if empty_rows_delete(self.path):
+                self.status = True
+                self.qty_calculation_status.setText('Przygotowanie excela ukończone.Czekaj na dalszy krok. ')
+            else:
+                self.status = False
+                self.qty_calculation_status.setText('PLIK JEST OTWARTY!!!! Zamknij go i kliknij przycisk ponownie. ')
+            if self.status:
+                try:
+                    qty_total_calculation(self.path, self.item_number, self.qty, self.qty_total)
+                    self.status = True
+                    self.qty_calculation_status.setText('Obliczanie Qty_Total ukończone. Czekaj na dalszy krok. ')
+                except:
+                    self.qty_calculation_status.setText('Problem z obliczeniem Qty-Total!!! Sprawdź plik. ')
+                    self.status = False
+            if self.status:
+                try:
+                    consolidation_and_segregation(self.path)
+                    self.qty_calculation_status.setText('Wszystko ukończono pomyślnie. Przejdź do kolejnego kroku. ')
+                except:
+                    self.qty_calculation_status.setText('Problem z konsolidacją lub segregacją!!! ')
+        else:
+            self.qty_calculation_status.setText('WYBIERZ PLIK W KROKU PIERWSZYM!!! ')
 
     def button_destination_path_clicked(self):
         self.destination_path = QFileDialog.getExistingDirectory(self, "Select Directory")

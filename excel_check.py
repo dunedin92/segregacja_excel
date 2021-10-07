@@ -14,9 +14,15 @@ def excel_check(bom_path):
     max_column = sheet.max_column
     max_row = sheet.max_row
 
+    if "BOM" in sheet.cell(row=1, column=1).value.upper():
+        row_to_check = 2
+    else:
+        row_to_check = 1
+
+
     for i in range(1, max_column + 1):
 
-        value = sheet.cell(row=1, column=i).value
+        value = sheet.cell(row=row_to_check, column=i).value
         if "TCH" in value.upper() and "1" in value.upper():
             kolumna_tch1 = i
 
