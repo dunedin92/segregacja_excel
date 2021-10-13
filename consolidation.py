@@ -5,7 +5,7 @@ from openpyxl.worksheet.table import Table, TableStyleInfo
 
 class Part:
     def __init__(self, part_number, qty_total=0, description="", description2="", tch="", producent="",
-                 kod_producenta="", kolor=""):
+                 kod_producenta="", kolor="", material=""):
         self.part_number = part_number
         self.qty_total = qty_total
         self.description = description
@@ -14,6 +14,7 @@ class Part:
         self.producent = producent
         self.kod_producenta = kod_producenta
         self.kolor = kolor
+        self.material = material
 
     def add_to_qty_total(self, value):
         self.qty_total = self.qty_total + value
@@ -21,14 +22,14 @@ class Part:
     def print_values(self):
         print("part_num = ", self.part_number, "|| qty_tot= ", self.qty_total, "|| desc= ",
               self.description, "|| desc2= ", self.description2, "|| tch= ", self.tch,
-              "|| producent= ", self.producent, "|| kod_produc= ", self.kod_producenta, "|| kolor= ", self.kolor)
+              "|| producent= ", self.producent, "|| kod_produc= ", self.kod_producenta, "|| kolor= ", self.kolor, "|| material= ", self.material)
 
     def print_values_simple(self):
         print("part_num = ", self.part_number, "|| qty_tot= ", self.qty_total)
 
     def values_to_list(self):
         object_value_list = [self.part_number, self.qty_total, self.description, self.description2,
-                             self.producent, self.kod_producenta, self.kolor]
+                             self.producent, self.kod_producenta, self.kolor, self.material]
         return object_value_list
 
 
@@ -96,11 +97,11 @@ def write_list_to_excel(bom_path, object_list, sheets_names):
             max_row = sheet.max_row
 
             if sheet.max_row == 1:
-                # print(sheet.cell(row=max_row, column=1).value)
+                print(sheet.cell(row=max_row, column=1).value)
                 sheet.cell(row=max_row + 1, column=1).value = 1
             else:
                 last_value = sheet.cell(row=max_row, column=1).value
-                # print(last_value, " - ", sheet.cell(row=max_row, column=2).value)
+                print(last_value, " - ", sheet.cell(row=max_row, column=2).value)
 
                 sheet.cell(row=max_row + 1, column=1).value = int(last_value) + 1
 
@@ -125,7 +126,7 @@ def write_list_to_excel(bom_path, object_list, sheets_names):
 def consolidation_and_segregation(bom_path):
     sheets_name = ["Blachy", "PC_PLEXI_itp.", "Frezowanie_toczenie", "Spawane", "DRUK_3D", "Z-normalia", "Zakupowe-reszta"]
     title_location = {"part_number": 0, "qty_total": 0, "description": 0, "description2": 0, "rysunek": 0, "tch": 0, "producent": 0,
-                      "kod_producenta": 0, "kolor": 0}
+                      "kod_producenta": 0, "kolor": 0, "material":0}
     title_names = ["Nr"]
     for element in title_location.keys():
         if element != "tch" and element != "rysunek":
@@ -160,6 +161,8 @@ def consolidation_and_segregation(bom_path):
             title_location["kolor"] = i
         if "RYSUNEK" in value.upper():
             title_location["rysunek"] = i
+        if "MATERIAL" in value.upper():
+            title_location["material"] = i
 
     print("\n Nagłówki i numery odpowiadających im kolumn w pierwszym arkuszu: ")
     print(title_location)
@@ -183,7 +186,8 @@ def consolidation_and_segregation(bom_path):
             producent = sheet.cell(row=row_number, column=title_location["producent"]).value
             kod_producenta = sheet.cell(row=row_number, column=title_location["kod_producenta"]).value
             kolor = sheet.cell(row=row_number, column=title_location["kolor"]).value
-            a = Part(part_number, qty_total, description, description2, tch, producent, kod_producenta, kolor)
+            material = sheet.cell(row=row_number, column=title_location["material"]).value
+            a = Part(part_number, qty_total, description, description2, tch, producent, kod_producenta, kolor, material)
 
 # sprawdzenie czy obiekt o takim samym PART_NUMBER jus istnieje w tablicy
 # jak istnieje stosujemy metode add_to_qty_total ==> dodaje do istniejącego obiektu qty total obecnego (konsolidacja)
@@ -219,7 +223,7 @@ def consolidation_and_segregation(bom_path):
     object_list_tworzywa_sztuczne = []
     print("\n\n segregujemy obiekty zgodnie z tch:\n\n")
     for i in object_list:
-        # i.print_values()
+        i.print_values()
         if i.tch.upper() == "C":
             # print("wrzucamy do C")
             object_list_c.append(i)

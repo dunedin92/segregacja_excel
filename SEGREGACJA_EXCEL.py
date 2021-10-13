@@ -9,7 +9,7 @@ from txt_file_creation import txt_file_creation
 from temp_file_list import temp_file_list
 from move_files import move_files
 from consolidation import consolidation_and_segregation
-from empty_rows_delete import  empty_rows_delete
+from empty_rows_delete import empty_rows_delete
 import os
 import sys
 import webbrowser
@@ -22,7 +22,7 @@ class MyWindow(QMainWindow):
     def __init__(self):
         super(MyWindow, self).__init__()
         self.setObjectName("MainWindow")
-        self.resize(640, 720)
+        self.resize(640, 760)
         self.setTabShape(QtWidgets.QTabWidget.Rounded)
         self.initUI()
 
@@ -87,7 +87,7 @@ class MyWindow(QMainWindow):
         self.bom_verification_info_text.setGeometry(QtCore.QRect(220, 120, 390, 25))
         self.bom_verification_info_text.setObjectName("bom_verification_info_text")
         self.block_2 = QtWidgets.QFrame(self.centralwidget)
-        self.block_2.setGeometry(QtCore.QRect(10, 170, 620, 120))
+        self.block_2.setGeometry(QtCore.QRect(10, 170, 620, 150))
         self.block_2.setAccessibleName("")
         self.block_2.setAccessibleDescription("")
         self.block_2.setLocale(QtCore.QLocale(QtCore.QLocale.Polish, QtCore.QLocale.Poland))
@@ -133,8 +133,23 @@ class MyWindow(QMainWindow):
         self.qty_calculation_status = QtWidgets.QLabel(self.block_2)
         self.qty_calculation_status.setGeometry(QtCore.QRect(220, 85, 390, 25))
         self.qty_calculation_status.setObjectName("qty_calculation_status")
+
+        self.consolidation_button = QtWidgets.QPushButton(self.block_2)
+        self.consolidation_button.setGeometry(QtCore.QRect(10, 115, 200, 23))
+        font = QtGui.QFont()
+        font.setFamily("Century Gothic")
+        font.setPointSize(10)
+        font.setBold(True)
+        font.setWeight(75)
+        self.consolidation_button.setFont(font)
+        self.consolidation_button.setDefault(True)
+        self.consolidation_button.setObjectName("consolidation_button")
+        self.consolidation_status = QtWidgets.QLabel(self.block_2)
+        self.consolidation_status.setGeometry(QtCore.QRect(220, 115, 390, 25))
+        self.consolidation_status.setObjectName("consolidation_status")
+
         self.block_3 = QtWidgets.QFrame(self.centralwidget)
-        self.block_3.setGeometry(QtCore.QRect(10, 295, 620, 120))
+        self.block_3.setGeometry(QtCore.QRect(10, 325, 620, 120))
         self.block_3.setAccessibleName("")
         self.block_3.setAccessibleDescription("")
         self.block_3.setLocale(QtCore.QLocale(QtCore.QLocale.Polish, QtCore.QLocale.Poland))
@@ -173,7 +188,7 @@ class MyWindow(QMainWindow):
         self.line_destination_path.setReadOnly(False)
         self.line_destination_path.setObjectName("line_destination_path")
         self.block_4 = QtWidgets.QFrame(self.centralwidget)
-        self.block_4.setGeometry(QtCore.QRect(10, 420, 620, 120))
+        self.block_4.setGeometry(QtCore.QRect(10, 450, 620, 120))
         self.block_4.setAccessibleName("")
         self.block_4.setAccessibleDescription("")
         self.block_4.setLocale(QtCore.QLocale(QtCore.QLocale.Polish, QtCore.QLocale.Poland))
@@ -212,7 +227,7 @@ class MyWindow(QMainWindow):
         self.line_source_path.setReadOnly(False)
         self.line_source_path.setObjectName("line_source_path")
         self.block_5 = QtWidgets.QFrame(self.centralwidget)
-        self.block_5.setGeometry(QtCore.QRect(10, 545, 620, 120))
+        self.block_5.setGeometry(QtCore.QRect(10, 575, 620, 120))
         self.block_5.setAccessibleName("")
         self.block_5.setAccessibleDescription("")
         self.block_5.setLocale(QtCore.QLocale(QtCore.QLocale.Polish, QtCore.QLocale.Poland))
@@ -265,7 +280,7 @@ class MyWindow(QMainWindow):
         self.end_status.setWordWrap(True)
         self.end_status.setObjectName("end_status")
         self.end_button = QtWidgets.QPushButton(self.centralwidget)
-        self.end_button.setGeometry(QtCore.QRect(510, 680, 120, 30))
+        self.end_button.setGeometry(QtCore.QRect(510, 710, 120, 30))
         font = QtGui.QFont()
         font.setFamily("Century Gothic")
         font.setPointSize(10)
@@ -292,8 +307,12 @@ class MyWindow(QMainWindow):
         self.block_2_title.setText(_translate("MainWindow", "Krok 2"))
         self.block_2_description.setText(_translate("MainWindow",
                                                     "<html><head/><body><p align=\"justify\">Przygotowanie pliku excel. Usunięcie niepotrzebnych wierszy. Policzenie ilości. Kkonsolidacja i segregacja danych do osobnych arkuszy w pliku.</p></body></html>"))
-        self.qty_calculation_button.setText(_translate("MainWindow", "Wykonaj Operacje"))
+        self.qty_calculation_button.setText(_translate("MainWindow", "Policz Qty_total"))
         self.qty_calculation_status.setText(_translate("MainWindow", "..."))
+
+        self.consolidation_button.setText(_translate("MainWindow", "Konsoliduj"))
+        self.consolidation_status.setText(_translate("MainWindow", "..."))
+
         self.block_3_title.setText(_translate("MainWindow", "Krok 3"))
         self.block_3_description.setText(_translate("MainWindow",
                                                     "Podaj ściezkę do miejsca gdzie bedą kopiowane posegregowane pliki i gdzie będzie zapisana lista brakujących plików."))
@@ -312,6 +331,7 @@ class MyWindow(QMainWindow):
         self.bom_button.clicked.connect(self.bom_button_clicked)
         self.bom_verification_button.clicked.connect(self.bom_verification_button_clicked)
         self.qty_calculation_button.clicked.connect(self.qty_calculation_button_clicked)
+        self.consolidation_button.clicked.connect(self.consolidation_button_clicked)
         self.button_destination_path.clicked.connect(self.button_destination_path_clicked)
         self.button_source_path.clicked.connect(self.button_source_path_clicked)
         self.button_segregation.clicked.connect(self.button_segregation_clicked)
@@ -363,18 +383,24 @@ class MyWindow(QMainWindow):
                 try:
                     qty_total_calculation(self.path, self.item_number, self.qty, self.qty_total)
                     self.status = True
-                    self.qty_calculation_status.setText('Obliczanie Qty_Total ukończone. Czekaj na dalszy krok. ')
+                    self.qty_calculation_status.setText('Obliczanie Qty_Total ukończone. Możesz przejść dalej ')
                 except:
                     self.qty_calculation_status.setText('Problem z obliczeniem Qty-Total!!! Sprawdź plik. ')
                     self.status = False
+        else:
+            self.qty_calculation_status.setText('WYBIERZ PLIK W KROKU PIERWSZYM!!! ')
+
+    def consolidation_button_clicked(self):
+        if self.bom_verification_button_status == True:
+            self.status = True
             if self.status:
                 try:
                     consolidation_and_segregation(self.path)
-                    self.qty_calculation_status.setText('Wszystko ukończono pomyślnie. Przejdź do kolejnego kroku. ')
+                    self.consolidation_status.setText('Konsolidacja ukończona. Przejdź do kolejnego kroku.')
                 except:
-                    self.qty_calculation_status.setText('Problem z konsolidacją lub segregacją!!! ')
+                    self.consolidation_status.setText('Problem z konsolidacją lub segregacją!!! ')
         else:
-            self.qty_calculation_status.setText('WYBIERZ PLIK W KROKU PIERWSZYM!!! ')
+            self.consolidation_status.setText('WYBIERZ PLIK W KROKU PIERWSZYM!!! ')
 
     def button_destination_path_clicked(self):
         self.destination_path = QFileDialog.getExistingDirectory(self, "Select Directory")
@@ -390,7 +416,7 @@ class MyWindow(QMainWindow):
         self.source_path = self.line_source_path.text()
         txt_file_name = "brakujace_pliki.txt"
 
-        if self.correct_bom_file_selected:
+        if self.bom_verification_button_status:
             if os.path.exists(self.destination_path):
                 if os.path.exists(self.source_path):
 
@@ -433,7 +459,7 @@ class MyWindow(QMainWindow):
             else:
                 self.end_status.setText("Nie wybrano ścieżki, do której mają być kopiowane pliki!")
         else:
-            self.end_status.setText("Nie wybrano BOM'u do segregacji lub wybrany plik nie został zweryfikowany.")
+            self.end_status.setText("Nie wybrano BOM'u do segregacji lub nie wybrano lokalizacji w Kroku 3 lub Kroku 4.")
 
     def end_button_clicked(self):
         sys.exit(app.exec_())
