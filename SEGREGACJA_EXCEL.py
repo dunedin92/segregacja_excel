@@ -306,7 +306,7 @@ class MyWindow(QMainWindow):
         self.bom_verification_info_text.setText(_translate("MainWindow", "..."))
         self.block_2_title.setText(_translate("MainWindow", "Krok 2"))
         self.block_2_description.setText(_translate("MainWindow",
-                                                    "<html><head/><body><p align=\"justify\">Przygotowanie pliku excel. Usunięcie niepotrzebnych wierszy. Policzenie ilości. Kkonsolidacja i segregacja danych do osobnych arkuszy w pliku.</p></body></html>"))
+                                                    "<html><head/><body><p align=\"justify\">Przygotowanie pliku excel. Usunięcie niepotrzebnych wierszy. Policzenie ilości. Konsolidacja i segregacja danych do osobnych arkuszy w pliku.</p></body></html>"))
         self.qty_calculation_button.setText(_translate("MainWindow", "Policz Qty_total"))
         self.qty_calculation_status.setText(_translate("MainWindow", "..."))
 

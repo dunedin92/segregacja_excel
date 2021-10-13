@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d0b6cb83-de5a-4795-843e-75d9fa5fe92f" name="Default Changelist" comment="poprawianie ułożenia kodu">
+    <list default="true" id="d0b6cb83-de5a-4795-843e-75d9fa5fe92f" name="Default Changelist" comment="dodano przycisk konsolidacji, naprawiono pare bugów">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SEGREGACJA_EXCEL.py" beforeDir="false" afterPath="$PROJECT_DIR$/SEGREGACJA_EXCEL.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/consolidation.py" beforeDir="false" afterPath="$PROJECT_DIR$/consolidation.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/empty_rows_delete.py" beforeDir="false" afterPath="$PROJECT_DIR$/empty_rows_delete.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pdf.swp" beforeDir="false" afterPath="$PROJECT_DIR$/pdf.swp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,7 +30,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../konsolidacja_excel" />
     <property name="settings.editor.selected.configurable" value="org.jetbrains.plugins.github.ui.GithubSettingsConfigurable" />
   </component>
   <component name="RunManager">
@@ -80,7 +79,14 @@
       <option name="project" value="LOCAL" />
       <updated>1624346755845</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="dodano przycisk konsolidacji, naprawiono pare bugów">
+      <created>1634109985037</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1634109985037</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -98,6 +104,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="poprawiono wyjatek dla małych znakow w excel" />
     <MESSAGE value="poprawianie ułożenia kodu" />
-    <option name="LAST_COMMIT_MESSAGE" value="poprawianie ułożenia kodu" />
+    <MESSAGE value="dodano przycisk konsolidacji, naprawiono pare bugów" />
+    <option name="LAST_COMMIT_MESSAGE" value="dodano przycisk konsolidacji, naprawiono pare bugów" />
   </component>
 </project>

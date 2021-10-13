@@ -27,7 +27,7 @@ def empty_rows_delete(bom_path):
 
     if not table_status:
         print("scalamy komórki pierwszego wiersza")
-        sheet.unmerge_cells("A1:Q1")
+        sheet.unmerge_cells(start_row=1, start_column=1, end_row=1, end_column=sheet.max_column)
         sheet.delete_rows(1, 1)
 
     for i in range(max_row, 1, -1):
@@ -53,7 +53,7 @@ def empty_rows_delete(bom_path):
     for i in range(1, sheet.max_column+1):
         for j in range(1, sheet.max_row+1):
             cell_value = sheet.cell(row=j, column=i).value
-            # print(cell_value)
+            print(cell_value)
             if cell_value == "" or cell_value == None:
                 sheet.cell(row=j, column=i).value = "-"
 
